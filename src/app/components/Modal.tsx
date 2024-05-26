@@ -1,10 +1,14 @@
-// components/Modal.tsx
-
 "use client";
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const Modal = ({ show, children, onClose }) => {
+interface ModalProps {
+  show: boolean;
+  children: ReactNode;
+  onClose: () => void;
+}
+
+const Modal: React.FC<ModalProps> = ({ show, children, onClose }) => {
   if (!show) {
     return null;
   }
