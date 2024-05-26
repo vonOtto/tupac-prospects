@@ -6,6 +6,7 @@ import Modal from './Modal';
 import ProspectForm from './ProspectForm';
 import withTranslation from '@/app/withTranslation';
 
+
 type Prospect = {
   id: string;
   company: string;
@@ -18,7 +19,11 @@ type Prospect = {
   archived?: boolean;
 };
 
-const ProspectList = ({ t }) => {
+type ProspectListProps = {
+  t: (key: string) => string;
+};
+
+const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -45,7 +50,7 @@ const ProspectList = ({ t }) => {
   }, []);
 
   const handleOpenModal = () => {
-    console.log("Opening modal..."); // Felsökning: logga när modal öppnas
+    console.log("Opening modal...");
     setShowModal(true);
   };
 
@@ -129,7 +134,9 @@ const ProspectList = ({ t }) => {
           : bValue.getTime() - aValue.getTime();
       }
 
-      return sortConfig.direction === 'ascending' ? Number(aValue) - Number(bValue) : Number(bValue) - aValue;
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortConfig.direction === 'ascending' ? aValue - bValue : bValue - aValue;
+      }
     }
 
     return 0;
