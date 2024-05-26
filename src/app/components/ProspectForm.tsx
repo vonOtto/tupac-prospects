@@ -1,13 +1,14 @@
-// components/ProspectForm.tsx
-
 "use client";
 
 import React, { useState } from 'react';
 import { db } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
+interface ProspectFormProps {
+  onClose: () => void;
+}
 
-const ProspectForm = ({ onClose }) => {
+const ProspectForm: React.FC<ProspectFormProps> = ({ onClose }) => {
   const [company, setCompany] = useState('');
   const [contactPerson, setContactPerson] = useState('');
   const [phone, setPhone] = useState('');
