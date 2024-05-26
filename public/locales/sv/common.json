@@ -1,0 +1,18 @@
+{
+  "Company": "Företag",
+  "Contact Person": "Kontaktperson",
+  "Phone": "Telefon",
+  "Email": "E-post",
+  "First Contact Date": "Datum för första kontakt",
+  "Comment": "Kommentar",
+  "Status": "Status",
+  "Search...": "Sök...",
+  "Filter by Company": "Filtrera efter företag",
+  "Filter by Contact Person": "Filtrera efter kontaktperson",
+  "Filter by Status": "Filtrera efter status",
+  "Add New Prospect": "Lägg till nytt prospekt",
+  "Add Prospect": "Lägg till prospekt",
+  "Cancel": "Avbryt",
+  "Prospect List": "Prospektlista",
+  "archive": "Arkivera"
+}
