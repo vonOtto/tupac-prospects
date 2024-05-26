@@ -6,7 +6,6 @@ import Modal from './Modal';
 import ProspectForm from './ProspectForm';
 import withTranslation from '@/app/withTranslation';
 
-
 type Prospect = {
   id: string;
   company: string;
@@ -128,7 +127,7 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
           : bValue.localeCompare(aValue);
       }
 
-      if (aValue instanceof Date && bValue instanceof Date) {
+      if (aValue instanceof Object && bValue instanceof Object && aValue instanceof Date && bValue instanceof Date) {
         return sortConfig.direction === 'ascending'
           ? aValue.getTime() - bValue.getTime()
           : bValue.getTime() - aValue.getTime();
@@ -229,32 +228,31 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
         </thead>
         <tbody>
           {filteredProspects.map((prospect, index) => (
-      <tr
-      key={prospect.id}
-      className={`${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700'} cursor-pointer`}
-      onClick={() => handleRowClick(prospect.id)}
-    >
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.company}</td>
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.contactPerson}</td>
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.phone}</td>
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.email}</td>
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.firstContactDate}</td>
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.comment}</td>
-      <td className="py-2 px-4 border-b border-gray-600">{prospect.status}</td>
-      <td className="py-2 px-4 border-b border-gray-600">
-        <div className="flex justify-center items-center space-x-2">
-          <FaArchive
-            className="cursor-pointer"
-            onClick={(event) => handleArchiveClick(prospect, event)}
-          />
-          <FaTrash
-            className="cursor-pointer"
-            onClick={(event) => handleDeleteClick(prospect, event)}
-          />
-        </div>
-      </td>
-    </tr>
-    
+            <tr
+              key={prospect.id}
+              className={`${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700'} cursor-pointer`}
+              onClick={() => handleRowClick(prospect.id)}
+            >
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.company}</td>
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.contactPerson}</td>
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.phone}</td>
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.email}</td>
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.firstContactDate}</td>
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.comment}</td>
+              <td className="py-2 px-4 border-b border-gray-600">{prospect.status}</td>
+              <td className="py-2 px-4 border-b border-gray-600">
+                <div className="flex justify-center items-center space-x-2">
+                  <FaArchive
+                    className="cursor-pointer"
+                    onClick={(event) => handleArchiveClick(prospect, event)}
+                  />
+                  <FaTrash
+                    className="cursor-pointer"
+                    onClick={(event) => handleDeleteClick(prospect, event)}
+                  />
+                </div>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
