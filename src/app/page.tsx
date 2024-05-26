@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import ProspectList from '@/app/components/ProspectList';
+import ProspectList from './components/ProspectList';
 
 export default function Home() {
   return (
