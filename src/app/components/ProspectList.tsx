@@ -137,6 +137,8 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return sortConfig.direction === 'ascending' ? aValue - bValue : bValue - aValue;
       }
+
+      return 0;
     }
 
     return 0;
