@@ -1,8 +1,0 @@
-{
-    "locales": ["en", "sv"],
-    "defaultLocale": "sv",
-    "pages": {
-      "*": ["common"]
-    }
-  }
-  

@@ -31,3 +31,14 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.skeleton {
+  @apply bg-gray-700 rounded animate-pulse;
+}
+.skeleton-text {
+  @apply h-4 bg-gray-600 rounded animate-pulse;
+}
+.skeleton-heading {
+  @apply h-6 bg-gray-600 rounded animate-pulse;
+}
