@@ -116,6 +116,10 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
     setProspectToDelete(null);
   };
 
+  const isDate = (value: any): value is Date => {
+    return value instanceof Date;
+  };
+  
   const sortedProspects = [...prospects].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
@@ -127,7 +131,7 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
           : bValue.localeCompare(aValue);
       }
   
-      if ((aValue instanceof Object) && (bValue instanceof Object) && (aValue instanceof Date) && (bValue instanceof Date)) {
+      if (isDate(aValue) && isDate(bValue)) {
         return sortConfig.direction === 'ascending'
           ? aValue.getTime() - bValue.getTime()
           : bValue.getTime() - aValue.getTime();
