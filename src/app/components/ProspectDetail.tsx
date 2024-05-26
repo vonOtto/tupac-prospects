@@ -18,7 +18,7 @@ const ProspectDetail = () => {
 
     const fetchProspect = async () => {
       try {
-        const docRef = doc(db, 'prospects', id);
+        const docRef = doc(db, 'prospects', Array.isArray(id) ? id[0] : id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -47,7 +47,7 @@ const ProspectDetail = () => {
           className="bg-blue-500 text-white p-2 rounded shadow-lg hover:bg-blue-700 mb-4"
           onClick={handleBackClick}
         >
-          {t('backButton')}
+          {t('back')}
         </button>
         <div className="space-y-4">
           <div className="h-6 bg-gray-700 rounded animate-pulse"></div>
@@ -68,7 +68,7 @@ const ProspectDetail = () => {
           className="bg-blue-500 text-white p-2 rounded shadow-lg hover:bg-blue-700 mb-4"
           onClick={handleBackClick}
         >
-          {t('backButton')}
+          {t('back')}
         </button>
         <div className="text-white">{t('Prospect not found')}</div>
       </div>
@@ -81,7 +81,7 @@ const ProspectDetail = () => {
         className="bg-blue-500 text-white p-2 rounded shadow-lg hover:bg-blue-700 mb-4"
         onClick={handleBackClick}
       >
-        {t('backButton')}
+        {t('back')}
       </button>
       <h1 className="text-2xl mb-4 text-white">{prospect.company}</h1>
       <p className="text-white">{t('Contact Person')}: {prospect.contactPerson}</p>
