@@ -2,11 +2,14 @@ import React from 'react';
 import useTranslation from 'next-translate/useTranslation';
 
 const withTranslation = (WrappedComponent) => {
-  return (props) => {
+  const ComponentWithTranslation = (props) => {
     const { t } = useTranslation('common');
-    console.log('Translation function in HOC:', t); // Logga översättningsfunktionen
     return <WrappedComponent t={t} {...props} />;
   };
+
+  ComponentWithTranslation.displayName = `withTranslation(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return ComponentWithTranslation;
 };
 
 export default withTranslation;
