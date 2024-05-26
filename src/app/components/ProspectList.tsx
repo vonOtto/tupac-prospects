@@ -120,28 +120,30 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
-
+  
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return sortConfig.direction === 'ascending'
           ? aValue.localeCompare(bValue)
           : bValue.localeCompare(aValue);
       }
-
-      if (aValue instanceof Object && bValue instanceof Object && aValue instanceof Date && bValue instanceof Date) {
+  
+      if ((aValue instanceof Object) && (bValue instanceof Object) && (aValue instanceof Date) && (bValue instanceof Date)) {
         return sortConfig.direction === 'ascending'
           ? aValue.getTime() - bValue.getTime()
           : bValue.getTime() - aValue.getTime();
       }
-
+  
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return sortConfig.direction === 'ascending' ? aValue - bValue : bValue - aValue;
       }
-
+  
       return 0;
     }
-
+  
     return 0;
   });
+  
+
 
   const filteredProspects = sortedProspects.filter((prospect) =>
     !prospect.archived &&
