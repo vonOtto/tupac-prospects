@@ -2,15 +2,25 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, DocumentData } from 'firebase/firestore';
 import useTranslation from 'next-translate/useTranslation';
 import { db } from '@/firebase';
+
+type Prospect = {
+  company: string;
+  contactPerson: string;
+  phone: string;
+  email: string;
+  firstContactDate: string;
+  comment: string;
+  status: string;
+};
 
 const ProspectDetail = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { id } = router.query;
-  const [prospect, setProspect] = useState(null);
+  const [prospect, setProspect] = useState<Prospect | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,7 +32,7 @@ const ProspectDetail = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setProspect(docSnap.data());
+          setProspect(docSnap.data() as Prospect);
         } else {
           console.log('No such document!');
         }
