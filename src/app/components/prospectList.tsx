@@ -8,6 +8,7 @@ import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import { FaPlus, FaSort, FaSortUp, FaSortDown, FaArchive } from 'react-icons/fa';
 import Modal from './Modal';
 import ProspectForm from './ProspectForm';
+import ProspectDetails from './ProspectDetails'; // Importera ProspectDetails
 
 type Prospect = {
   id: string;
@@ -26,6 +27,8 @@ const ProspectList = () => {
   const router = useRouter();
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false); // State för detaljvyn
+  const [selectedProspect, setSelectedProspect] = useState<Prospect | null>(null); // Vald prospekt
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [prospectToArchive, setProspectToArchive] = useState<Prospect | null>(null);
   const [search, setSearch] = useState('');
@@ -56,6 +59,16 @@ const ProspectList = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleOpenDetailsModal = (prospect: Prospect) => {
+    setSelectedProspect(prospect);
+    setShowDetailsModal(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setShowDetailsModal(false);
+    setSelectedProspect(null);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,8 +204,8 @@ const ProspectList = () => {
           <tr>
             {['company', 'contactPerson', 'phone', 'email', 'firstContactDate', 'comment', 'status', ''].map((key) => (
               key ? (
-                <th key={key} className="py-2 px-4 border-b border-gray-600 cursor-pointer" onClick={() => handleSort(key as keyof Prospect)}>
-                  <div className="flex items-center">
+                <th key={key} className="py-2 px-4 border-b border-gray-600">
+                  <div className="flex items-center cursor-pointer" onClick={() => handleSort(key as keyof Prospect)}>
                     {t(key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim())} {getSortIcon(key as keyof Prospect)}
                   </div>
                 </th>
