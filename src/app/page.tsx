@@ -1,16 +1,15 @@
 // page.tsx
 "use client";
 
-
-import React, { Suspense } from 'react';
+import React from 'react';
 import ProspectList from './components/ProspectList';
 
-const HomePage: React.FC = () => {
+export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <div className="h-screen">
       <ProspectList />
-    </Suspense>
+    </div>
   );
-};
+}
 
-export default HomePage;
+
