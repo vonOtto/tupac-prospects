@@ -1,8 +1,13 @@
 import '../app/globals.css';
 import { AppProps } from 'next/app';
+import React, { Suspense } from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
+  return (
+  <Suspense fallback={<div>Loading...</div>}>
+  <Component {...pageProps} />
+  </Suspense>
+  );
+};
 
 export default MyApp;
