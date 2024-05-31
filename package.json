@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "firebase": "^10.12.1",
+    "firebase": "^10.12.2",
     "next": "14.2.3",
     "next-translate": "^2.6.2",
     "react": "^18",
@@ -18,10 +18,10 @@
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.12.13",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "eslint": "^9.3.0",
     "eslint-config-next": "14.2.3",
     "next-translate-plugin": "^2.6.2",
     "postcss": "^8",
