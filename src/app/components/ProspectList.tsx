@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { db } from '@/firebase';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { FaPlus, FaSort, FaSortUp, FaSortDown, FaArchive, FaTrash } from 'react-icons/fa';
@@ -219,49 +219,51 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
           className="p-2 rounded bg-gray-700 text-white"
         />
       </div>
-      <table className="min-w-full bg-gray-800 text-white rounded">
-        <thead>
-          <tr>
-            {['company', 'contactPerson', 'phone', 'email', 'firstContactDate', 'comment', 'status'].map((key) => (
-              <th key={key} className="py-2 px-4 border-b border-gray-600">
-                <div className="flex items-center cursor-pointer" onClick={() => handleSort(key as keyof Prospect)}>
-                  {t(key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim())} {getSortIcon(key as keyof Prospect)}
-                </div>
-              </th>
-            ))}
-            <th className="py-2 px-4 border-b border-gray-600">{t('Actions')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredProspects.map((prospect, index) => (
-            <tr
-              key={prospect.id}
-              className={`${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700'} cursor-pointer`}
-              onClick={() => handleRowClick(prospect.id)}
-            >
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.company}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.contactPerson}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.phone}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.email}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.firstContactDate}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.comment}</td>
-              <td className="py-2 px-4 border-b border-gray-600">{prospect.status}</td>
-              <td className="py-2 px-4 border-b border-gray-600">
-                <div className="flex justify-center items-center space-x-2">
-                  <FaArchive
-                    className="cursor-pointer"
-                    onClick={(event) => handleArchiveClick(prospect, event)}
-                  />
-                  <FaTrash
-                    className="cursor-pointer"
-                    onClick={(event) => handleDeleteClick(prospect, event)}
-                  />
-                </div>
-              </td>
+      <Suspense fallback={<div>Loading...</div>}>
+        <table className="min-w-full bg-gray-800 text-white rounded">
+          <thead>
+            <tr>
+              {['company', 'contactPerson', 'phone', 'email', 'firstContactDate', 'comment', 'status'].map((key) => (
+                <th key={key} className="py-2 px-4 border-b border-gray-600">
+                  <div className="flex items-center cursor-pointer" onClick={() => handleSort(key as keyof Prospect)}>
+                    {t(key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim())} {getSortIcon(key as keyof Prospect)}
+                  </div>
+                </th>
+              ))}
+              <th className="py-2 px-4 border-b border-gray-600">{t('Actions')}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredProspects.map((prospect, index) => (
+              <tr
+                key={prospect.id}
+                className={`${index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700'} cursor-pointer`}
+                onClick={() => handleRowClick(prospect.id)}
+              >
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.company}</td>
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.contactPerson}</td>
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.phone}</td>
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.email}</td>
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.firstContactDate}</td>
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.comment}</td>
+                <td className="py-2 px-4 border-b border-gray-600">{prospect.status}</td>
+                <td className="py-2 px-4 border-b border-gray-600">
+                  <div className="flex justify-center items-center space-x-2">
+                    <FaArchive
+                      className="cursor-pointer"
+                      onClick={(event) => handleArchiveClick(prospect, event)}
+                    />
+                    <FaTrash
+                      className="cursor-pointer"
+                      onClick={(event) => handleDeleteClick(prospect, event)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Suspense>
 
       {/* Add Prospect Modal */}
       <Modal show={showModal} onClose={handleCloseModal}>
