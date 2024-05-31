@@ -1,10 +1,18 @@
-import { Suspense } from 'react';
-import ProspectDetail from './ProspectDetail'; // Assuming this component uses useRouter or useSearchParams
+// page.tsx
+"use client";
 
-export default function Page() {
+import React, { Suspense } from 'react';
+import ProspectList from './components/ProspectList';
+
+export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ProspectDetail />
-    </Suspense>
+    <div className="h-screen">
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProspectList />
+      </Suspense>
+    </div>
   );
 }
+
+
+
