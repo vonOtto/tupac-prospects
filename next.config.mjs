@@ -4,7 +4,6 @@ import nextTranslate from 'next-translate-plugin';
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  missingSuspenseWithCSRBailout: false,
   ...nextTranslate({
     // other next-translate options if any
   }),
