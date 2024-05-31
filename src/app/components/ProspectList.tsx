@@ -1,17 +1,16 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { db } from '@/firebase';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { FaPlus, FaSort, FaSortUp, FaSortDown, FaArchive, FaTrash } from 'react-icons/fa';
 import Modal from './Modal';
 import ProspectForm from './ProspectForm';
+import StatusDropdown from './StatusDropdown';
 import withTranslation from '@/app/withTranslation';
 
 type Prospect = {
   id: string;
   company: string;
   contactPerson: string;
-  phone: string;
-  email: string;
   firstContactDate: string;
   comment: string;
   status: string;
@@ -29,6 +28,9 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [prospectToArchive, setProspectToArchive] = useState<Prospect | null>(null);
   const [prospectToDelete, setProspectToDelete] = useState<Prospect | null>(null);
+  const [selectedProspect, setSelectedProspect] = useState<Prospect | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number, left: number }>({ top: 0, left: 0 });
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState({
     company: '',
@@ -116,38 +118,53 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
     setProspectToDelete(null);
   };
 
+  const handleStatusClick = (prospect: Prospect, event: React.MouseEvent, element: HTMLTableCellElement) => {
+    event.stopPropagation();
+    setSelectedProspect(prospect);
+    setIsDropdownOpen(true);
+    const rect = element.getBoundingClientRect();
+    setDropdownPosition({ top: rect.bottom, left: rect.left });
+  };
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (selectedProspect) {
+      const prospectRef = doc(db, 'prospects', selectedProspect.id);
+      await updateDoc(prospectRef, { status: newStatus });
+      setIsDropdownOpen(false);
+      setSelectedProspect(null);
+    }
+  };
+
   const isDate = (value: any): value is Date => {
     return value instanceof Date;
   };
-  
+
   const sortedProspects = [...prospects].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
-  
+
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return sortConfig.direction === 'ascending'
           ? aValue.localeCompare(bValue)
           : bValue.localeCompare(aValue);
       }
-  
+
       if (isDate(aValue) && isDate(bValue)) {
         return sortConfig.direction === 'ascending'
           ? aValue.getTime() - bValue.getTime()
           : bValue.getTime() - aValue.getTime();
       }
-  
+
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return sortConfig.direction === 'ascending' ? aValue - bValue : bValue - aValue;
       }
-  
+
       return 0;
     }
-  
+
     return 0;
   });
-  
-
 
   const filteredProspects = sortedProspects.filter((prospect) =>
     !prospect.archived &&
@@ -223,7 +240,7 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
         <table className="min-w-full bg-gray-800 text-white rounded">
           <thead>
             <tr>
-              {['company', 'contactPerson', 'phone', 'email', 'firstContactDate', 'comment', 'status'].map((key) => (
+              {['company', 'contactPerson', 'firstContactDate', 'status', 'comment'].map((key) => (
                 <th key={key} className="py-2 px-4 border-b border-gray-600">
                   <div className="flex items-center cursor-pointer" onClick={() => handleSort(key as keyof Prospect)}>
                     {t(key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim())} {getSortIcon(key as keyof Prospect)}
@@ -242,11 +259,14 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
               >
                 <td className="py-2 px-4 border-b border-gray-600">{prospect.company}</td>
                 <td className="py-2 px-4 border-b border-gray-600">{prospect.contactPerson}</td>
-                <td className="py-2 px-4 border-b border-gray-600">{prospect.phone}</td>
-                <td className="py-2 px-4 border-b border-gray-600">{prospect.email}</td>
                 <td className="py-2 px-4 border-b border-gray-600">{prospect.firstContactDate}</td>
+                <td 
+                  className="py-2 px-4 border-b border-gray-600 relative" 
+                  onClick={(e) => handleStatusClick(prospect, e, e.currentTarget)}
+                >
+                  {prospect.status}
+                </td>
                 <td className="py-2 px-4 border-b border-gray-600">{prospect.comment}</td>
-                <td className="py-2 px-4 border-b border-gray-600">{prospect.status}</td>
                 <td className="py-2 px-4 border-b border-gray-600">
                   <div className="flex justify-center items-center space-x-2">
                     <FaArchive
@@ -310,6 +330,15 @@ const ProspectList: React.FC<ProspectListProps> = ({ t }) => {
             </button>
           </div>
         </Modal>
+      )}
+
+      {/* Status Dropdown */}
+      {isDropdownOpen && selectedProspect && (
+        <StatusDropdown
+          onSelectStatus={handleStatusChange}
+          onClose={() => setIsDropdownOpen(false)}
+          position={dropdownPosition}
+        />
       )}
     </div>
   );
